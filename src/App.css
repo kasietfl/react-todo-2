@@ -73,6 +73,15 @@ body {
   width: 510px;
 }
 
+.complete {
+  text-decoration: line-through;
+  opacity: 0.4;
+}
+
+.task-text {
+  font-size: 18px;
+}
+
 .icons {
   display: flex;
   align-items: center;
@@ -81,6 +90,10 @@ body {
 }
 
 .icon-complete {
+  margin-right: 5px;
+}
+
+.icon-delete {
   margin-right: 5px;
 }
 

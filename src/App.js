@@ -15,14 +15,15 @@ function App() {
         { name: 'Saturday', id: 6 },
         { name: 'Sunday', id: 7 },
     ];
+
     const navigate = useNavigate();
     const location = useLocation();
+
     const [activeItem, setActiveItem] = React.useState();
 
     React.useEffect(() => {
         const dayId = location.pathname.split('/days/')[1];
         const day = days.find((day) => day.id == dayId);
-
         setActiveItem(day);
     }, [location.pathname]);
 

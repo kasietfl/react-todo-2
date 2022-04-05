@@ -5,20 +5,26 @@ import TodoForm from './TodoForm'
 
 import {BsArrowLeftCircle} from 'react-icons/bs'
 
-function TaskList({activeItem}) {
 
-  const [tasks, setTasks] = useState([])
+function TaskList({activeItem}) {
+  
+  function loadData() {
+    const items = JSON.parse(localStorage.getItem('tasks'));
+    // let dayId = localStorage.getItem('dayId')
+    
+    if (items) {
+      return items
+    } 
+}
+
+  const [tasks, setTasks] = useState(loadData())
+  
 
   useEffect(()=>{
     localStorage.setItem("tasks", JSON.stringify(tasks.map(task => task)));
-    localStorage.setItem("dayId", JSON.stringify(activeItem))
-    const items = JSON.parse(localStorage.getItem('tasks'));
-    console.log(items)
-    setTasks(items)
-  }, [tasks, activeItem]);
+    localStorage.setItem("dayId", JSON.stringify(activeItem && activeItem.id))
+  }, [ tasks, activeItem ]);
 
-
-  
 
   function addTask(task){
       if(!task.text || /^\s*$/.test(task.text)){
@@ -29,14 +35,28 @@ function TaskList({activeItem}) {
       setTasks(newTasks)
   }
 
+  function editTask(todoId, newValue){
+    if(!newValue.text || /^\s*$/.test(newValue.text)){
+        return;
+    }
+
+    setTasks(prev => prev.map(item => item.id === todoId ? newValue : item));
+}  
+
   function deleteTask(id){
     let removeArr = [...tasks].filter(task => task.id !== id);
     setTasks(removeArr);
   }
 
-  function completeTask(){
-    console.log(activeItem.name)
-  }
+  function completeTask(id){
+    let updatedTodos = tasks.map(task => {
+        if(task.id === id){
+          task.isComplete = !task.isComplete
+        }
+        return task;
+    })
+    setTasks(updatedTodos);
+}
 
   return (
     <div >
@@ -48,6 +68,7 @@ function TaskList({activeItem}) {
       <Task 
         tasks={tasks}
         completeTask={completeTask}
+        editTask={editTask}
         deleteTask={deleteTask}
       />
     </div>
